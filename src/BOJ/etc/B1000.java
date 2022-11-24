@@ -8,7 +8,6 @@ public class B1000 {
         int A = scanner.nextInt();
         int B = scanner.nextInt();
         scanner.close();
-
         System.out.println(A+B);
     }
 }
