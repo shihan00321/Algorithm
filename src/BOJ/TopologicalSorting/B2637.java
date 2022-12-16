@@ -61,7 +61,7 @@ public class B2637 {
         while (!queue.isEmpty()){
             int x = queue.poll();
             for(Part part : arr[x]){
-                needPart[part.data] += part.count * needPart[x];;
+                needPart[part.data] += part.count * needPart[x];
                 inDegree[part.data]--;
                 if(inDegree[part.data] == 0) {
                     queue.add(part.data);
