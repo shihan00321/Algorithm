@@ -61,6 +61,7 @@ public class B1753 {
         queue.add(new Path(K, dist[K]));
         while (!queue.isEmpty()){
             Path path = queue.poll();
+            if(dist[path.destination] < path.distance) continue;
             for(Edge edge : edges[path.destination]){
                 if(dist[edge.destination] <= dist[path.destination] + edge.weight) continue;
                 dist[edge.destination] = dist[path.destination] + edge.weight;
