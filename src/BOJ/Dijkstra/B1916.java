@@ -57,7 +57,7 @@ public class B1916 {
         queue.add(new ShortestPath(resultS, 0));
         while (!queue.isEmpty()){
             ShortestPath path = queue.poll();
-            if(dist[path.destination] != path.distance) continue;
+            if(dist[path.destination] < path.distance) continue;
             for(BusInfo busInfo : bus[path.destination]){
                 if(dist[busInfo.destination] <= dist[path.destination] + busInfo.weight) continue;
                 dist[busInfo.destination] = dist[path.destination] + busInfo.weight;
