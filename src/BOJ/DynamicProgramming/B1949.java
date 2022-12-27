@@ -13,7 +13,6 @@ public class B1949 {
     static int[][] dy;
     public static void main(String[] args) throws IOException {
         input();
-        
     }
     public static void input() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
