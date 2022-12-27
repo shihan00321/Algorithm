@@ -19,7 +19,7 @@ public class B15651 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        arr = new int[N + 1];
+        arr = new int[M + 1];
     }
     public static void algo(int k){
         if(k == M + 1) {
