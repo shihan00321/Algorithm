@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 public class BaseCode {
     /**
      * 코딩테스트 유형
+     * 1초에 1억 번의 연산이 가능함 -> 시간 복잡도 계산 시 참고
      * 완전 탐색 -> N개 중 중복을 허용o or x 해서 M개를 고르거나 나열하기
      *
      * 이분 탐색 -> 최대, 최소를 구하라
