@@ -7,15 +7,34 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
 public class B7569 {
     static int M, N, H;
     static int[][][] tomato;
-    static int[][][] distance;
     static boolean[][][] visit;
-    static int[][] dir = {{1, 0, 0}, {-1, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}};
+    static int[][] dir = {{0, 0, 1}, {0, 0, -1}, {0, 1, 0}, {0, -1, 0}, {1, 0, 0}, {-1, 0, 0}};
     public static void main(String[] args) throws IOException {
         input();
-        System.out.println(bfs());
+        algo();
+        System.out.println(output());
+    }
+    private static int output() {
+        int result = 0;
+        for (int k = 0; k < H; k++) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if(tomato[i][j][k] == 0) return -1;
+                    else result = Math.max(result, tomato[i][j][k] - 1);
+                }
+            }
+        }
+        return result;
     }
     public static void input() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,67 +42,49 @@ public class B7569 {
         M = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
         H = Integer.parseInt(st.nextToken());
-        tomato = new int[H][N][M];
-        visit = new boolean[H][N][M];
-        distance = new int[H][N][M];
-        for (int i = 0; i < H; i++) {
-            for (int j = 0; j < N; j++) {
+        tomato = new int[N][M][H];
+        visit = new boolean[N][M][H];
+        for (int k = 0; k < H; k++) {
+            for (int i = 0; i < N; i++) {
                 st = new StringTokenizer(br.readLine());
-                for (int k = 0; k < M; k++) {
+                for (int j = 0; j < M; j++) {
                     tomato[i][j][k] = Integer.parseInt(st.nextToken());
-                    visit[i][j][k] = false;
-                    distance[i][j][k] = -1;
                 }
             }
         }
     }
-    public static int bfs(){
+    public static void algo(){
         Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < H; i++) {
-            for (int j = 0; j < N; j++) {
-                for (int k = 0; k < M; k++) {
-                   if (tomato[i][j][k] == 1) {
-                       queue.add(i);
-                       queue.add(j);
-                       queue.add(k);
-                       visit[i][j][k] = true;
-                       distance[i][j][k] = 0;
-                   }
+        for (int k = 0; k < H; k++) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if(tomato[i][j][k] == 1) {
+                        queue.add(i);
+                        queue.add(j);
+                        queue.add(k);
+                        visit[i][j][k] = true;
+                    }
                 }
+
             }
         }
         while (!queue.isEmpty()){
-            int h = queue.poll();
             int y = queue.poll();
             int x = queue.poll();
+            int h = queue.poll();
             for (int i = 0; i < 6; i++) {
-                int nh = dir[i][0] + h;
-                int ny = dir[i][1] + y;
-                int nx = dir[i][2] + x;
-                if(nx < 0 || ny < 0 || nh < 0 || nx >= M || ny >= N || nh >= H) continue;
-                if(visit[nh][ny][nx]) continue;
-                if(tomato[nh][ny][nx] == -1) continue;
-                visit[nh][ny][nx] = true;
-                tomato[nh][ny][nx] = 1;
-                queue.add(nh);
+                int ny = y + dir[i][1];
+                int nx = x + dir[i][0];
+                int nh = h + dir[i][2];
+                if(ny < 0 || nx < 0 || nh < 0 || ny >= N || nx >= M || nh >= H) continue;
+                if(visit[ny][nx][nh]) continue;
+                if(tomato[ny][nx][nh] == -1) continue;
                 queue.add(ny);
                 queue.add(nx);
-                distance[nh][ny][nx] = distance[h][y][x] + 1;
+                queue.add(nh);
+                visit[ny][nx][nh] = true;
+                tomato[ny][nx][nh] = tomato[y][x][h] + 1;
             }
         }
-        int result = 0;
-        for (int i = 0; i < H; i++) {
-            for (int j = 0; j < N; j++) {
-                for (int k = 0; k < M; k++) {
-                    //중요!
-                    if(tomato[i][j][k] == -1) continue;
-                    if (distance[i][j][k] == -1) {
-                        return -1;
-                    }
-                    result = Math.max(result, distance[i][j][k]);
-                }
-            }
-        }
-        return result;
     }
 }
