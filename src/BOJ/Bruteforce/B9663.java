@@ -6,43 +6,51 @@ import java.io.InputStreamReader;
 
 public class B9663 {
     static int N, result;
-    //무조건 한 행에 하나의 퀸이 들어갈 수 밖에 없음
-    static int[] col; //i,col[i]에 값이 들어있음
+    static int[][] chess;
+    //무조건 각 열 or 행에 하나의 값이 들어가야한다.
+    static int[] col;
     public static void main(String[] args) throws IOException {
         input();
-        algo(1);
+        algo(0);
         System.out.println(result);
     }
     public static void input() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        col = new int[N + 1];
+        chess = new int[N][N];
+        col = new int[N];
     }
+    //row -> depth
     public static void algo(int row){
-        if(row == N + 1) result++;
+        if(row == N) {
+            result++;
+        }
         else {
-            for (int c = 1; c <= N; c++) {
-                //놓을 수 있는 수인가?
-                boolean possible = true;
-                for (int i = 1; i < row; i++) {
-                    if(checkQueen(row, c, i, col[i])) {
-                        possible = false;
+            for (int column = 0; column < N; column++) {
+                boolean check = true;
+                for (int j = 0; j < row; j++) {
+                    //두 개 이상의 Queen 들어왔을 때 부터 checking
+                    if(!checkQueen(row, column, j, col[j])) {
+                        check = false;
                         break;
                     }
                 }
-                if(possible){
-                    col[row] = c;
+                if(check){
+                    col[row] = column;
                     algo(row + 1);
                     col[row] = 0;
                 }
             }
         }
     }
-    private static boolean checkQueen(int row, int c, int row2, int c2) {
-        //row, c 내가 지금 놓으려는 수, row2, c2 기존에 놓은 수
-        if(c == c2) return true;
-        if(row + c2 ==  row2 + c) return true; //대각선
-        if(row - c2 ==  row2 - c) return true; //대각선
-        return false;
+    //놓을 수 없으면 false, 있다면 true
+    private static boolean checkQueen(int row, int column, int insertRow, int insertColumn) {
+        //행은 비교 할 필요가 없음 -> 한 행마다 재귀가 돌아가기 때문
+        // 같은 열
+        if(column == insertColumn) return false;
+        //대각선
+        if(row + insertColumn == insertRow + column) return false;
+        if(row - insertColumn == insertRow - column) return false;
+        return true;
     }
 }
