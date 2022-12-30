@@ -28,11 +28,11 @@ public class B2623 {
         for (int i = 1; i <= N; i++) {
             arr[i] = new ArrayList<>();
         }
-        for (int i = 1; i <= M; i++) {
+        for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int num = Integer.parseInt(st.nextToken());
+            int n = Integer.parseInt(st.nextToken());
             int x = Integer.parseInt(st.nextToken());
-            for (int j = 0; j < num - 1; j++) {
+            for (int j = 0; j < n - 1; j++) {
                 int y = Integer.parseInt(st.nextToken());
                 arr[x].add(y);
                 inDegree[y]++;
@@ -42,23 +42,23 @@ public class B2623 {
     }
     public static void algo(){
         Queue<Integer> queue = new LinkedList<>();
-        ArrayList<Integer> sort = new ArrayList<>();
+        ArrayList<Integer> result = new ArrayList<>();
         for (int i = 1; i <= N; i++) {
             if(inDegree[i] == 0) queue.add(i);
         }
-        while (!queue.isEmpty()){
-            int x = queue.poll();
-            sort.add(x);
-            for(int y : arr[x]){
-                inDegree[y]--;
-                if(inDegree[y] == 0) queue.add(y);
+        while (!queue.isEmpty()) {
+            int target = queue.poll();
+            result.add(target);
+            for (int x :arr[target]){
+                inDegree[x]--;
+                if(inDegree[x] == 0) queue.add(x);
             }
         }
-        if(sort.size() == N) {
-            for (int x: sort) {
-                stringBuilder.append(x).append('\n');
+        if(result.size() != N) stringBuilder.append(0);
+        else {
+            for (Integer integer : result) {
+                stringBuilder.append(integer).append('\n');
             }
         }
-        else stringBuilder.append(0);
     }
 }
