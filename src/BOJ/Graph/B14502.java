@@ -8,80 +8,78 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class B14502 {
-    static int N, M;
-    static int[][] arr;
+    static int N, M, result;
+    static int[][] laboratory;
     static boolean[][] visit;
-    static int count = 0;
-    static int[][] dir = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+    static int[][] dir = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     public static void main(String[] args) throws IOException {
         input();
         dfs(0);
-        System.out.println(count);
+        System.out.println(result);
     }
     public static void input() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        arr = new int[N][M];
+        laboratory = new int[N][M];
+        visit = new boolean[N][M];
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < M; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
+                laboratory[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        visit = new boolean[N][M];
     }
-    private static void dfs(int wallCnt) {
-        if(wallCnt == 3){
-            //바이러스를 퍼뜨림
-            bfs();
-            return;
-        }
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if(arr[i][j] == 0) {
-                    arr[i][j] = 1;
-                    dfs(wallCnt + 1);
-                    arr[i][j] = 0;
+    public static void dfs(int depth){
+        //벽을 다 세우고 나면 바이러스를 퍼뜨린다.
+        if(depth == 3) bfs();
+        else {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if(laboratory[i][j] == 0) {
+                        //벽을 세움
+                        laboratory[i][j] = 1;
+                        dfs(depth + 1);
+                        laboratory[i][j] = 0;
+                    }
                 }
             }
         }
     }
-
     private static void bfs() {
         Queue<Integer> queue = new LinkedList<>();
-        //모든 바이러스를 queue에 넣어준다.
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 visit[i][j] = false;
-                if(arr[i][j] == 2){
+                if(laboratory[i][j] == 2) {
                     queue.add(i);
                     queue.add(j);
                     visit[i][j] = true;
                 }
             }
         }
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int y = queue.poll();
             int x = queue.poll();
             for (int i = 0; i < 4; i++) {
-                int nx = x + dir[i][1];
-                int ny = y + dir[i][0];
-                if (nx < 0 || ny < 0 || nx >= M || ny >= N) continue;
-                if(arr[ny][nx] != 0) continue;
+                int ny = dir[i][0] + y;
+                int nx = dir[i][1] + x;
+                if(ny < 0 || nx < 0 || ny >= N || nx >= M) continue;
                 if(visit[ny][nx]) continue;
-                visit[ny][nx] = true;
+                if(laboratory[ny][nx] != 0) continue;
                 queue.add(ny);
                 queue.add(nx);
+                visit[ny][nx] = true;
             }
         }
-        int result = 0;
+        int middleResult = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if(arr[i][j] == 0 && !visit[i][j]) result++;
+                //연구소 값을 변경하지 않았음 -> 즉 0이면서 방문하지 않은 곳까지 check 해주어야 바이러스가 진정으로 퍼지지 않은 곳임.
+                if(laboratory[i][j] == 0 && !visit[i][j]) middleResult++;
             }
         }
-        count = Math.max(count, result);
+        result = Math.max(result, middleResult);
     }
 }
