@@ -1,40 +1,32 @@
 package BOJ.Sort;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class B11652 {
-    public static int N;
-    public static long[] arr;
-
-    public static void main(String[] args) {
+    static HashMap<Long, Integer> hashMap = new HashMap<>();
+    static int N;
+    public static void main(String[] args) throws IOException {
         input();
-        algo();
     }
-    public static void input(){
-        Scanner scanner = new Scanner(System.in);
-        N = scanner.nextInt();
-        arr = new long[N];
-
+    public static void input() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
         for (int i = 0; i < N; i++) {
-            arr[i] = scanner.nextLong();
+            long x = Long.parseLong(br.readLine());
+            if(!hashMap.containsKey(x)) hashMap.put(x, 1);
+            else hashMap.replace(x, hashMap.get(x) + 1);
         }
-    }
-
-    public static void algo(){
-        Arrays.sort(arr);
-        int count = 1;
-        int max = 1;
-        long result = arr[0];
-        for (int i = 1; i < arr.length; i++) {
-            if(arr[i] == arr[i-1]){
-                count++;
-            } else {
-                count = 1;
-            }
-            if(max < count){
-                max = count;
-                result = arr[i];
+        int count = 0;
+        long result = 0;
+        ArrayList<Long> arrayList = new ArrayList<>(hashMap.keySet());
+        Collections.sort(arrayList);
+        for (long key : arrayList) {
+            if(count != Math.max(count, hashMap.get(key))) {
+                count = Math.max(count, hashMap.get(key));
+                result = key;
             }
         }
         System.out.println(result);
