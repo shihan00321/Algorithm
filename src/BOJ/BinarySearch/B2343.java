@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class B2343 {
-    static int N, M;
-    static int[] classTime;
+    static int N, M, blueRayMax;
+    static int[] blueRay;
     public static void main(String[] args) throws IOException {
         input();
         algo();
@@ -17,45 +17,33 @@ public class B2343 {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        classTime = new int[N];
-
+        blueRay = new int[N];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            classTime[i] = Integer.parseInt(st.nextToken());
+            blueRay[i] = Integer.parseInt(st.nextToken());
+            blueRayMax = Math.max(blueRayMax, blueRay[i]);
         }
-    }
-    public static boolean isBluRay(int x){
-        int minute = 0;
-        int count = 1;
-        for (int i = 0; i < N; i++) {
-            if((classTime[i] + minute) <= x){
-                minute += classTime[i];
-            } else {
-                count++;
-                minute = classTime[i];
-            }
-        }
-        return count <= M;
     }
     public static void algo(){
-//        Arrays.sort(classTime);
-        //순서가 바뀌면 안되므로 sorting x
-
-        //배열의 최대값보다 작은 블루레이 제외
-        int l = 1;
-        for (int i = 0; i < N; i++) {
-            l = Math.max(l, classTime[i]);
-        }
+        int l = blueRayMax;
         int r = 1000000000;
         int result = Integer.MAX_VALUE;
-        while (l <= r){
+        while (l <= r) {
             int mid = (l + r) / 2;
-            if(isBluRay(mid)){
-                result = mid;
-                r = mid - 1;
-            } else {
-                l = mid + 1;
+            int count = 1;
+            int sum = 0;
+            for (int i = 0; i < N; i++) {
+                sum += blueRay[i];
+                if(sum > mid) {
+                    count++;
+                    sum = blueRay[i];
+                }
             }
+            if(count <= M) {
+                r = mid - 1;
+                result = mid;
+            }
+            else l = mid + 1;
         }
         System.out.println(result);
     }
