@@ -6,33 +6,32 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class B13144 {
-    static int n;
-    static int[] arr;
-    static int[] count;
+    static int N;
+    static long result = 0;
+    static int[] arr, count;
     public static void main(String[] args) throws IOException {
         input();
         algo();
+        System.out.println(result);
     }
     public static void input() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-        arr = new int[n + 1];
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N];
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
         count = new int[100001];
     }
-    public static void algo(){
-        long result = 0;
-        for (int i = 1, r = 1; i <= n; i++) {
-            while (r < n + 1 && count[arr[r]] == 0){
+    public static void algo() {
+        for (int l = 0, r = 0; l < N; l++) {
+            while(r < N && count[arr[r]] == 0) {
                 count[arr[r]]++;
                 r++;
             }
-            result += r - i;
-            count[arr[i]]--;
+            result += r - l;
+            count[arr[l]]--;
         }
-        System.out.println(result);
     }
 }
