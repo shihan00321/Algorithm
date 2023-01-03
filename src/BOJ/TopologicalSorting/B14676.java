@@ -19,8 +19,8 @@ public class B14676 {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
-        inDegree = new int[N + 1];
         arr = new ArrayList[N + 1];
+        inDegree = new int[N + 1];
         building = new int[N + 1];
         preBuild = new int[N + 1];
         for (int i = 1; i <= N; i++) {
@@ -33,52 +33,46 @@ public class B14676 {
             arr[x].add(y);
             inDegree[y]++;
         }
-        //게임 정보 1 -> 건설, 2 -> 파괴
-        for (int i = 1; i <= K; i++) {
+        boolean build = true;
+        for (int i = 0; i < K; i++) {
             st = new StringTokenizer(br.readLine());
-            int j = Integer.parseInt(st.nextToken());
-            int x = Integer.parseInt(st.nextToken());
-            if(j == 1) {
-                if(!isBuild(x)) {
-                    System.out.println("Lier!");
-                    return;
-                }
-            }
-            else {
-                if(!isDestroy(x)){
-                    System.out.println("Lier!");
-                    return;
-                }
+            int gameInfo = Integer.parseInt(st.nextToken());
+            int buildInfo = Integer.parseInt(st.nextToken());
+            if(!isBuild(gameInfo, buildInfo)) {
+                build = false;
+                break;
             }
         }
-        System.out.println("King-God-Emperor");
+        if(build) System.out.println("King-God-Emperor");
+        else System.out.println("Lier!");
     }
-    private static boolean isBuild(int x) {
-        boolean isPossible = false;
-        //선행 건물이 지어졌다면 건물을 지을 수 있음
-        if(preBuild[x] == inDegree[x]) isPossible = true;
-        if(isPossible) {
-            building[x]++;
-            //여러 개 지어졌다면 선행 건물을 올리면 안됨
-            if(building[x] == 1){
-                for(int y : arr[x]){
-                    preBuild[y]++;
+    private static boolean isBuild(int gameInfo, int buildInfo) {
+        boolean possible = false;
+        if(gameInfo == 1){
+            //건물을 짓는 경우
+            if(preBuild[buildInfo] == inDegree[buildInfo]){
+                building[buildInfo]++;
+                //1개 지어질 때만 선행 건물을 지었다는 표시를 해야함.
+                if(building[buildInfo] == 1) {
+                    for(int y : arr[buildInfo]){
+                        preBuild[y]++;
+                    }
+                }
+                possible = true;
+            }
+        }
+        else {
+            //건물을 부수는 경우
+            if(building[buildInfo] > 0) {
+                building[buildInfo]--;
+                possible = true;
+            }
+            if(building[buildInfo] == 0){
+                for(int y : arr[buildInfo]){
+                    preBuild[y]--;
                 }
             }
         }
-        return isPossible;
-    }
-    private static boolean isDestroy(int x) {
-        boolean isPossible = false;
-        if(building[x] > 0) isPossible = true;
-        if(isPossible) {
-            building[x]--;
-            if(building[x] == 0){
-                for (int y : arr[x]){
-                    inDegree[y]++;
-                }
-            }
-        }
-        return isPossible;
+        return possible;
     }
 }
