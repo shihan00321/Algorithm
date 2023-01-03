@@ -15,32 +15,25 @@ public class B1806 {
     public static void input() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         N = Integer.parseInt(st.nextToken());
         S = Integer.parseInt(st.nextToken());
-        arr = new int[N + 1];
+        arr = new int[N];
         st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= N; i++) {
+        for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
     }
     public static void algo(){
-        int sum = 0;
-        int r = 1;
-        int result = N + 1;
-        for (int l = 1; l <= N; l++) {
-            while (r < N + 1 && sum < S){
+        int sum = 0, result = N + 1;
+        for (int l = 0, r = 0; l < N; l++) {
+            while (r < N && sum < S) {
                 sum += arr[r];
                 r++;
             }
-            if(sum >= S){
-                result = Math.min(result, r - l);
-            }
+            if(sum >= S) result = Math.min(result, r - l);
             sum -= arr[l];
         }
-        if(result == N + 1)
-            System.out.println(0);
-        else
-            System.out.println(result);
+        if(result == N + 1) System.out.println(0);
+        else System.out.println(result);
     }
 }
