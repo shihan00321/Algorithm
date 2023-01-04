@@ -7,15 +7,15 @@ import java.util.StringTokenizer;
 
 public class B1991 {
     static int N;
-    static StringBuilder stringBuilder = new StringBuilder();
     static Tree tree = new Tree();
+    static StringBuilder stringBuilder = new StringBuilder();
     public static void main(String[] args) throws IOException {
         input();
-        pre_order(tree.root);
+        pre_order(tree.root); //전위
         stringBuilder.append('\n');
-        in_order(tree.root);
+        in_order(tree.root); //중위
         stringBuilder.append('\n');
-        post_order(tree.root);
+        post_order(tree.root); //후위
         System.out.println(stringBuilder);
     }
     public static void input() throws IOException {
@@ -26,46 +26,46 @@ public class B1991 {
             tree.createNode(st.nextToken().charAt(0), st.nextToken().charAt(0), st.nextToken().charAt(0));
         }
     }
-    private static void post_order(Node root) { //후위 순회
-        if (root.left != null) post_order(root.left);
-        if (root.right != null) post_order(root.right);
+    private static void pre_order(Node root){
         stringBuilder.append(root.data);
+        if(root.left != null) pre_order(root.left);
+        if(root.right != null) pre_order(root.right);
     }
-    private static void in_order(Node root) { //중위 순회
-        if (root.left != null) in_order(root.left);
+    private static void in_order(Node root) {
+        if(root.left != null) in_order(root.left);
         stringBuilder.append(root.data);
-        if (root.right != null) in_order(root.right);
+        if(root.right != null) in_order(root.right);
     }
-    private static void pre_order(Node root) { //전위 순회
+    private static void post_order(Node root) {
+        if(root.left != null) post_order(root.left);
+        if(root.right != null) post_order(root.right);
         stringBuilder.append(root.data);
-        if (root.left != null) pre_order(root.left);
-        if (root.right != null) pre_order(root.right);
-    }
-    static class Tree {
-        Node root;
-        public void createNode(char data, char left, char right){
-            if(root == null){
-                root = new Node(data);
-                root.left = (left != '.' ? new Node(left) : null);
-                root.right = (right != '.' ? new Node(right) : null);
-            } else searchTargetNode(root, data, left, right); //탐색
-        }
-        private void searchTargetNode(Node root, char data, char left, char right) {
-            if(root == null) return;
-            else if (root.data == data) {
-                root.left = (left != '.') ? new Node(left) : null;
-                root.right = (right != '.') ? new Node(right) : null;
-            } else {
-                searchTargetNode(root.left, data, left, right);
-                searchTargetNode(root.right, data, left, right);
-            }
-        }
     }
     static class Node {
         char data;
         Node left, right;
-        public Node(char data) {
-            this.data = data;
+        public Node(char data) {this.data = data;}
+    }
+    static class Tree {
+        Node root;
+        public void createNode(char par, char left, char right){
+            if(root == null) {
+                root = new Node(par);
+                root.left = (left != '.' ? new Node(left) : null);
+                root.right = (right != '.' ? new Node(right) : null);
+            }
+            else searchNode(par, root, left, right);
+        }
+        public void searchNode(char par, Node node, char left, char right){
+            if(node == null) return;
+            if(node.data == par) {
+                if(left != '.') node.left = new Node(left);
+                if(right != '.') node.right = new Node(right);
+            }
+            else {
+                searchNode(par, node.left, left, right);
+                searchNode(par, node.right, left, right);
+            }
         }
     }
 }
