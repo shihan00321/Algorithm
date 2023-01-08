@@ -15,6 +15,5 @@ public class Test {
         StringTokenizer st = new StringTokenizer(br.readLine());
     }
     public static void algo(){
-
     }
 }
