@@ -7,7 +7,6 @@ import java.util.StringTokenizer;
 
 public class B21919 {
     static int N;
-    static int[] A;
     static long result = -1; //최소 공배수
     public static void main(String[] args) throws IOException {
         input();
@@ -16,7 +15,6 @@ public class B21919 {
     public static void input() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        A = new int[N + 1];
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 1; i <= N; i++) {
             int target = Integer.parseInt(st.nextToken());
