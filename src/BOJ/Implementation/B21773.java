@@ -41,7 +41,7 @@ public class B21773 {
         }
         for (int i = 0; i < T; i++) {
             Process process = queue.poll();
-            assert process != null;
+            assert process != null; // assert -> 참이면 Pass, 거짓이면 AssertionError
             stringBuilder.append(process.id).append('\n');
             process.time--;
             process.priority--;
