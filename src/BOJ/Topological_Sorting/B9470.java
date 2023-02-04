@@ -1,4 +1,4 @@
-package BOJ.TopologicalSorting;
+package BOJ.Topological_Sorting;
 
 import java.io.BufferedReader;
 import java.io.IOException;
